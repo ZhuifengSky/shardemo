@@ -1,0 +1,27 @@
+ dataSources:
+  xw_user0: !!org.apache.commons.dbcp.BasicDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/xw_user0
+    username: root
+    password: 1234
+  xw_user1: !!org.apache.commons.dbcp.BasicDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/xw_user1
+    username: root
+    password: 1234
+
+ shardingRule:
+  tables:
+    t_order:
+      actualDataNodes: xw_user${0..1}.t_order_${0..1}
+      databaseStrategy: 
+        inline:
+          shardingColumn: user_id
+          algorithmExpression: xw_user${user_id % 2}
+      tableStrategy: 
+        inline:
+          shardingColumn: user_id
+          algorithmExpression: t_order_${user_id % 2}
+  bindingTables:
+     - t_order
+  defaultKeyGeneratorClassName: io.shardingsphere.core.keygen.DefaultKeyGenerator

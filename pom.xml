@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>shardemo</groupId>
+  <artifactId>shardemo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <properties>
+        <sharding-sphere.version>3.0.0</sharding-sphere.version>
+        <common-dbcp.version>1.4</common-dbcp.version>
+	    <!-- spring版本号 -->
+		<spring.version>4.3.21.RELEASE</spring.version>
+		<!-- mybatis版本号 -->
+		<mybatis.version>3.4.4</mybatis.version>
+		<!-- myql驱动版本号 -->
+		<mysql.version>5.1.45</mysql.version>
+  </properties>
+  <dependencies>
+  		<dependency>
+		    <groupId>io.shardingsphere</groupId>
+		    <artifactId>sharding-jdbc-core</artifactId>
+		    <version>${sharding-sphere.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.shardingsphere</groupId>
+		    <artifactId>sharding-jdbc-spring-namespace</artifactId>
+		    <version>${sharding-sphere.version}</version>
+		</dependency>
+  		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>${common-dbcp.version}</version>
+		</dependency>
+		
+		<!-- Mysql数据库驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+		
+		<!-- SPRING begin -->
+	    <dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-context</artifactId>
+	        <version>${spring.version}</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-web</artifactId>
+	        <version>${spring.version}</version>
+	    </dependency>
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-aop</artifactId>
+	        <version>${spring.version}</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-tx</artifactId>
+	        <version>${spring.version}</version>
+	    </dependency>
+  </dependencies>
+</project>

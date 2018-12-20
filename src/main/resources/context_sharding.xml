@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:sharding="http://shardingsphere.io/schema/shardingsphere/sharding" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://shardingsphere.io/schema/shardingsphere/sharding 
+                        http://shardingsphere.io/schema/shardingsphere/sharding/sharding.xsd 
+                        ">
+    <bean id="xw_user0" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3308/xw_user0" />
+        <property name="username" value="root" />
+        <property name="password" value="1234" />
+    </bean>
+    <bean id="xw_user1" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3308/xw_user1" />
+        <property name="username" value="root" />
+        <property name="password" value="1234" />
+    </bean>
+    
+    <sharding:inline-strategy id="databaseStrategy" sharding-column="user_id" algorithm-expression="xw_user$->{user_id % 2}" />
+    <sharding:inline-strategy id="orderTableStrategy" sharding-column="user_id" algorithm-expression="t_order_$->{user_id % 2}" />
+    <!-- <sharding:inline-strategy id="orderItemTableStrategy" sharding-column="order_id" algorithm-expression="t_order_item$->{order_id % 2}" /> -->
+    
+    <sharding:data-source id="shardingDataSource">
+        <sharding:sharding-rule data-source-names="xw_user0,xw_user1">
+            <sharding:table-rules>
+                <sharding:table-rule logic-table="t_order" actual-data-nodes="xw_user$->{0..1}.t_order_$->{0..1}" database-strategy-ref="databaseStrategy" table-strategy-ref="orderTableStrategy" />
+                <!-- <sharding:table-rule logic-table="t_order_item" actual-data-nodes="ds$->{0..1}.t_order_item$->{0..1}" database-strategy-ref="databaseStrategy" table-strategy-ref="orderItemTableStrategy" /> -->
+            </sharding:table-rules>
+        </sharding:sharding-rule>
+    </sharding:data-source>
+    <bean id="datasourceMap" class="java.util.HashMap">
+	   <constructor-arg>
+	      <map key-type="java.lang.String">   
+	         <entry key="shardingDataSource" value-ref="shardingDataSource"/>
+          </map>  
+	   </constructor-arg>
+	</bean>
+	<bean id="dataSourceInit" class="com.common.db.SpringDbSource">	
+		<property name="clientMaps" ref="datasourceMap" />
+	</bean>
+</beans>
